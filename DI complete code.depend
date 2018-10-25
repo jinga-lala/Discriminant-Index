@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1540429747 source:c:\users\yash jain\desktop\research\di complete code\main.cpp
+	<iostream>
+	<map>
+	<vector>
+	<algorithm>
+	<utility>
+	<fstream>
+	<iomanip>
+	<ctime>
+	<cstdlib>
+	<string>
+
