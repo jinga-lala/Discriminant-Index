@@ -277,7 +277,9 @@ void PrintHelp(){
 }
 
 int main (){
-    //vector < vector <int> > raw_data(students);
+    cout<<ln<<ln<<"The code has been developed by Mr. Yash Jain (B.Tech, IIT Bombay CSE) and Dr. P.K. Joshi (President IJSO, & TIFR)"<<ln;
+    cout<< "For any further query the authors of this code can be reached at yash.jain3599@gmail.com or pkkjoshi@gmail.com"<<ln<<ln<<ln;
+
     cout<<"Do you want help in running this code? Enter \"h\" for instructions otherwise \"s\" to skip : ";
 	string h;cin>>h;
 	if(h=="H"||h=="h"||h=="help"||h=="Help"||h=="HELP")
@@ -501,7 +503,7 @@ int main (){
 		    	else{
 		    		no_of_datapts = r* (double)pow(10.0,(OrderOf10(questions,j)- log10(randomness)));
 		    	}	
-                cout<<i<<" "<<j<<" "<<no_of_datapts<<ln;    
+                cout<<"question no."<<i<<" | step size:"<<j<<" | numeber of data points: "<<no_of_datapts<<ln;    
 		        for (long long k = 0; k < no_of_datapts; ++k)
 		        {
                     srand(rand()+k*time(0));
@@ -607,7 +609,7 @@ int main (){
 			    		no_of_datapts = r*(double)pow(10,(OrderOf10(questions,j)- log10(randomness)));
 			    	}	
 			    	// cout<<no_of_datapts<<ln;
-                    cout<<i<<" "<<j<<" "<<no_of_datapts<<ln;    
+                    cout<<"question no."<<i<<" | step size:"<<j<<" | numeber of data points: "<<no_of_datapts<<ln;    
 			        for (long long k = 0; k < no_of_datapts; ++k)
 			        {
 
