@@ -15,27 +15,27 @@
 #define ln endl
 using namespace std;
 
-int students = 290;
-int questions = 30;
-int c = 78;
-int starting_step = 2;
-int ending_step = 29;
+long long students = 290;
+long long questions = 30;
+long long c = 78;
+long long starting_step = 2;
+long long ending_step = 29;
 long long randomness = 1;
-int paper_type;
-int help=0;
-multimap< int , map< double , vector<int> > > ans;
+long long paper_type;
+long long help=0;
+multimap< long long , map< double , vector<long long> > > ans;
 vector < vector <float> > raw_data;
-vector<int> selQ_number;
+vector<long long> selQ_number;
 vector<float> subjQ;
-void combinationUtil(int arr[], vector <int> data, int start, int end,
-                     int index, int r, int iter);
+void combinationUtil(long long arr[], vector <long long> data, long long start, long long end,
+                     long long index, long long r, long long iter);
 
 // The main function that prints all combinations of size r
 // in arr[] of size n. This function mainly uses combinationUtil()
-void printCombination(int arr[], int n, int r, int iter)
+void printCombination(long long arr[], long long n, long long r, long long iter)
 {
     // A temporary array to store all combination one by one
-    vector <int> data(r,0);
+    vector <long long> data(r,0);
 
     // Print all combination using temprary array 'data[]'
     combinationUtil(arr, data, 0, n-1, 0, r , iter);
@@ -53,24 +53,24 @@ bool compare(const pair<float, float>&i, const pair<float ,float>&j)
 	// }
     return i.second > j.second;
 }
-void combinationUtil(int arr[], vector <int> data, int start, int end,
-                     int index, int r, int iter)
+void combinationUtil(long long arr[], vector <long long> data, long long start, long long end,
+                     long long index, long long r, long long iter)
 {
     // Current combination is ready to be printed, print it
     if (index == r )
     {
 
-        int d = rand() % randomness;
+        long long d = rand() % randomness;
         if (d >= randomness-1){
         double top_c = 0;
         double bottom_c = 0;
         vector < pair <float , float > >  req_sum;
-        for(int i =0 ;i < students ; i++){
+        for(long long i =0 ;i < students ; i++){
             req_sum.push_back( make_pair( raw_data[i][iter] , 0) ); //iter is the ques. no.
         }
-        for (int i = 0; i < students; ++i)
+        for (long long i = 0; i < students; ++i)
         {
-            for (int j  = 0; j < r; ++j)
+            for (long long j  = 0; j < r; ++j)
             {
                 req_sum[i].second += raw_data[i][data[j]];
             }
@@ -81,22 +81,22 @@ void combinationUtil(int arr[], vector <int> data, int start, int end,
 //            cout<<i.second<<" ";
 //        }cout<<ln;
         double DI;
-        for (int i = 0; i < c; ++i)
+        for (long long i = 0; i < c; ++i)
         {
             top_c += req_sum[i].first;
             //cout<<req_sum[i].first<<" ";
         }
         //cout<<ln;
-        for (int i = students - c ; i < students ; ++i)
+        for (long long i = students - c ; i < students ; ++i)
         {
             bottom_c += req_sum[i].first;
             //cout<<req_sum[i].first<<" ";
         }//cout<<ln;
        // cout<<top_c<<" "<<bottom_c<<ln;
         DI = (top_c - bottom_c)/(c*subjQ[iter]);
-        const std::map< double , vector <int> > m1 ={{DI , data}};
-        int q = iter;
-        pair < int , map< double , vector<int> > > x;
+        const std::map< double , vector <long long> > m1 ={{DI , data}};
+        long long q = iter;
+        pair < long long , map< double , vector<long long> > > x;
         x.first = q;
         x.second = m1;
         ans.insert(x);
@@ -109,7 +109,7 @@ void combinationUtil(int arr[], vector <int> data, int start, int end,
     // "end-i+1 >= r-index" makes sure that including one element
     // at index will make a combination with remaining elements
     // at remaining positions
-    for (int i=start; i<=end && end-i+1 >= r-index; i++)
+    for (long long i=start; i<=end && end-i+1 >= r-index; i++)
     {
         data[index] = arr[i];
         combinationUtil(arr, data, i+1, end, index+1, r ,iter);
@@ -118,28 +118,28 @@ void combinationUtil(int arr[], vector <int> data, int start, int end,
 
 
 
-string generateBitString(int qset[], int n, int size){//flag=1 means including question
+string generateBitString(long long qset[], long long n, long long size){//flag=1 means including question
 	vector<char> v;
-	for (int i = 0; i < size; ++i)
+	for (long long i = 0; i < size; ++i)
 	{
 		v.push_back('1');
 	}
-	for (int i = 0; i < n -size; ++i)
+	for (long long i = 0; i < n -size; ++i)
 	{
 		v.push_back('0');
 	}
 	sort(qset, qset+n);
 	srand(rand());
 	string ans="";
-	int a=0;
-	for (int i = 0,j=0; i < questions ; ++i)
+	long long a=0;
+	for (long long i = 0,j=0; i < questions ; ++i)
 	{
 		if(j<n && i==qset[j] && v.size()>0){ //probabilistically   may be this make q30 less probable!!
 			/*a = rand()%2;
 			if(a=='1') size--;
 			ans += to_string(a);
 			j++;*/
-			int a = rand()%v.size();
+			long long a = rand()%v.size();
 			ans += v[a];
 			v.erase(v.begin()+a);
             ++j;
@@ -156,18 +156,18 @@ string generateBitString(int qset[], int n, int size){//flag=1 means including q
 	return ans;
 }
 
-void generateDIusingBitString(string Bitstring, int iter){
+void generateDIusingBitString(string Bitstring, long long iter){
         // cout<<"YASH "<<iter<<" "<<Bitstring<<ln;
 		double top_c = 0;
         double bottom_c = 0;
         vector < pair <float , float > >  req_sum;
-        vector<int> data;
-        for(int i =0 ;i < students ; i++){
+        vector<long long> data;
+        for(long long i =0 ;i < students ; i++){
             req_sum.push_back( make_pair( raw_data[i][iter] , 0) ); //iter is the ques. no.
         }
-        for (int i = 0; i < students; ++i)
+        for (long long i = 0; i < students; ++i)
         {
-            for (int j  = 0; j < questions ; ++j)
+            for (long long j  = 0; j < questions ; ++j)
             {
             	if ((Bitstring[j])=='1') {
                     // cout<<j<<" "<<raw_data[i][j]<<ln;
@@ -176,7 +176,7 @@ void generateDIusingBitString(string Bitstring, int iter){
         
             }
         }
-        for (int j  = 0; j < questions ; ++j)
+        for (long long j  = 0; j < questions ; ++j)
         {
             if ((Bitstring[j])=='1') data.push_back(j);
         }
@@ -186,29 +186,29 @@ void generateDIusingBitString(string Bitstring, int iter){
            cout<<i.second<<" ";
        }cout<<ln;*/
         double DI;
-        for (int i = 0; i < c; ++i)
+        for (long long i = 0; i < c; ++i)
         {
             top_c += req_sum[i].first;
             // cout<<req_sum[i].first<<" ";
         }
         // cout<<ln;
-        for (int i = students - c ; i < students ; ++i)
+        for (long long i = students - c ; i < students ; ++i)
         {
             bottom_c += req_sum[i].first;
             //cout<<req_sum[i].first<<" ";
         }//cout<<ln;
        // cout<<top_c<<" "<<bottom_c<<" "<<data.size()<<  ln;
         DI = (top_c - bottom_c)/(c*subjQ[iter]);
-        const std::map< double , vector <int> > m1 ={{DI , data}};
-        int q = iter;
-        pair < int , map< double , vector<int> > > x;
+        const std::map< double , vector <long long> > m1 ={{DI , data}};
+        long long q = iter;
+        pair < long long , map< double , vector<long long> > > x;
         x.first = q;
         x.second = m1;
         ans.insert(x);
         return;
 }
 
-long long binomialCoeff(int n, int k) 
+long long binomialCoeff(long long n, long long k) 
 { 
     long long res = 1; 
   
@@ -217,7 +217,7 @@ long long binomialCoeff(int n, int k)
         k = n - k; 
   
     // Calculate value of [n * (n-1) *---* (n-k+1)] / [k * (k-1) *----* 1] 
-    for (int i = 0; i < k; ++i) 
+    for (long long i = 0; i < k; ++i) 
     { 
         res *= (n - i); 
         res /= (i + 1); 
@@ -227,8 +227,8 @@ long long binomialCoeff(int n, int k)
 } 
 
 
-int OrderOf10(int n, int k){
-	int num, den1, den2;
+long long OrderOf10(long long n, long long k){
+	long long num, den1, den2;
 	num = (float)n*log10(n)-0.4342944819*(float)n + 0.39908993417 + 0.5*(float)log10(n);
 	den1 = (float)k*log10(k)-0.4342944819*(float)k + 0.39908993417 + 0.5*(float)log10(k);
 	den2 = (float)(n-k)*log10(n-k)-0.4342944819*(float)(n-k) + 0.39908993417 + 0.5*(float)log10(n-k);
@@ -275,7 +275,6 @@ void PrintHelp(){
 	cout<< "                     be calculated among each other."<<ln<<ln;
 	cout<< "              *******************************************************************"<<ln;
 }
-
 int main (){
     cout<<ln<<ln<<"The code has been developed by Mr. Yash Jain (B.Tech, IIT Bombay CSE) and Dr. P.K. Joshi (President IJSO, & TIFR)"<<ln;
     cout<< "For any further query the authors of this code can be reached at yash.jain3599@gmail.com or pkkjoshi@gmail.com"<<ln<<ln<<ln;
@@ -331,13 +330,82 @@ int main (){
             string seQ;
             cin>>seQ;
             fin.open(seQ +".txt");
-            int a;
+            long long a;
             while(fin>>a){
                 selQ_number.push_back(a-1);
             }
             fin.close();
             selfSelective=1;
+            cout<<"Enter Starting Step Size : ";
+            cin>>starting_step;
+            while(selQ_number.size()!=0 && starting_step> selQ_number.size()){
+                help++;
+                if(help > 3){
+                    cout<<" Do you want help in running this code? Enter \"h\" for instructions otherwise \"s\" to skip : ";
+                    string h;cin>>h;
+                    if(h=="H"||h=="h"||h=="help"||h=="Help"||h=="HELP")
+                        PrintHelp();
+                    help=0;
+                }
+                cout<<"Invalid input (should be less than number of selective questions), Enter Again  : ";
+                cin>>starting_step;
+            }
+            while((yash==1 && starting_step > questions) || (yash==0 && starting_step>= questions) ){
+                help++;
+                if(help > 3){
+                    cout<<" Do you want help in running this code? Enter \"h\" for instructions otherwise \"s\" to skip : ";
+                    string h;cin>>h;
+                    if(h=="H"||h=="h"||h=="help"||h=="Help"||h=="HELP")
+                        PrintHelp();
+                    help=0;
+                }
+                cout<<"Invalid input (should be less than (in without self) or less than or equal to (in including self) number of questions), Enter Again  : ";
+                cin>>starting_step;
+            }
+            cout<<"Ending Step Size : ";
+            cin>>ending_step;
+            while(selQ_number.size()!=0 && (ending_step> selQ_number.size()) )  {
+                help++;
+                if(help > 3){
+                    cout<<" Do you want help in running this code? Enter \"h\" for instructions otherwise \"s\" to skip : ";
+                    string h;cin>>h;
+                    if(h=="H"||h=="h"||h=="help"||h=="Help"||h=="HELP")
+                        PrintHelp();
+                    help=0;
+                }
+                cout<<"Invalid input (should be less than number of selective questions), Enter Again  : ";
+                cin>>ending_step;
+            }
+            while((yash==1 && ending_step > questions) || (yash==0 && ending_step>= questions) ){
+                help++;
+                if(help > 3){
+                    cout<<" Do you want help in running this code? Enter \"h\" for instructions otherwise \"s\" to skip : ";
+                    string h;cin>>h;
+                    if(h=="H"||h=="h"||h=="help"||h=="Help"||h=="HELP")
+                        PrintHelp();
+                    help=0;
+                }
+                cout<<"Invalid input (should be less than number of questions), Enter Again  : ";
+                cin>>ending_step;
+            }
+            while(ending_step < starting_step){
+                help++;
+                if(help > 3){
+                    cout<<" Do you want help in running this code? Enter \"h\" for instructions otherwise \"s\" to skip : ";
+                    string h;cin>>h;
+                    if(h=="H"||h=="h"||h=="help"||h=="Help"||h=="HELP")
+                        PrintHelp();
+                    help=0;
+                }
+                cout<<"Invalid input (ending step should be greater than starting step), Enter Again  :";
+                cin>>ending_step;
+            }
+            cout<<"Enter Randomness scale, i.e. 1 in how many to be considered(default: 1 in 10000) : ";
+            cin>>randomness;
         }
+        //Starting step ending step randomness missing -> fixed
+
+
     }else{
         cout<<"Do you want to consider only selective questions? (y/n) : ";
         cin>>u;
@@ -358,7 +426,7 @@ int main (){
             string seQ;
             cin>>seQ;
             fin.open(seQ +".txt");
-            int a;
+            long long a;
             while(fin>>a){
             	selQ_number.push_back(a-1);
             }
@@ -440,23 +508,23 @@ int main (){
     cout<< "Sit Back and Relax, leave the hardwork to the code."<<ln;
     fin.open(input_file_name + ".txt");
     vector < vector <float> > raw_data2(students);
-    for(int i=0;i<questions;++i){ //update maximum marks for each question
+    for(long long i=0;i<questions;++i){ //update maximum marks for each question
         float a;
         fin>>a;
         subjQ.push_back(a);
         //cout<<a<<" ";
     }
-    for (int i = 0; i < students; ++i){
+    for (long long i = 0; i < students; ++i){
         raw_data2[i] = std::vector<float> (questions);
-        for(int j = 0; j < questions ; ++j){
+        for(long long j = 0; j < questions ; ++j){
             fin>>raw_data2[i][j];
            // cout<<raw_data2[i][j]<<" ";
         }
         //cout<<ln;
     }
     raw_data = raw_data2;
-//    for(int i =0 ;i < students; ++i){
-//        for(int j=0;j< questions;++j){
+//    for(long long i =0 ;i < students; ++i){
+//        for(long long j=0;j< questions;++j){
 //            cout<<raw_data[i][j]<<" ";
 //        }
 //        cout<<ln;
@@ -466,51 +534,66 @@ int main (){
     if(yash==0){
 	    if(selQ_number.size()==0){
 	    	//Whether selective DI needed to be calculated or not
-	    	for (int i = 0; i < questions; ++i)
+	    	for (long long i = 0; i < questions; ++i)
 	    	{
 	    		selQ_number.push_back(i); // if not then continue with the normal way and initialise with all the question number
 	    	}
 	    }
-	    for (int i = 0; i < selQ_number.size(); ++i){
+	    for (long long i = 0; i < selQ_number.size(); ++i){
 	        srand(rand());
-	        int temp [selQ_number.size()-1];
-	        for (int j = 0,k =0; j < selQ_number.size()-1 ; ++j,++k){
+	        long long temp [selQ_number.size()-1];
+	        for (long long j = 0,k =0; j < selQ_number.size()-1 ; ++j,++k){
 	            if(k == selQ_number[i] ) {
 	                k++;
 	            }
 
 	            temp[j] = selQ_number[k] ;
 	        }
-	        /*for(int k = starting_step; k <= ending_step ; ++k ){
+	        /*for(long long k = starting_step; k <= ending_step ; ++k ){
 	        printCombination(temp , selQ_number.size() - 1 , k , selQ_number[i]	);
 	        }*/
             // cout<<"DFs";
 	        
 	        set<string> VISITED;
-		    for(int j = starting_step ; j <= ending_step; ++j){
+		    for(long long j = starting_step ; j <= ending_step; ++j){
                 float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 		    	long long no_of_datapts;
 		    	if(randomness==1){
-		    		int estimate = OrderOf10(questions,j);
+		    		long long estimate = OrderOf10(selQ_number.size(),j);
 		    		if(estimate > 12){
 		    			cout<<"Too less randomness, Please try again after increasing randomness"<<endl;
 		    			return 0;
 		    		}else{
-		    			no_of_datapts = binomialCoeff(questions-1,j);
+		    			// no_of_datapts = binomialCoeff(questions-1,j); CHANGE
+                        // cout<<questions<<" "<<selQ_number.size()<<ln;
+                        no_of_datapts = binomialCoeff(selQ_number.size()-1,j);
+
                         // cout<<no_of_datapts<<ln;
 		    		}
 		    	}
 		    	else{
-		    		no_of_datapts = r* (double)pow(10.0,(OrderOf10(questions,j)- log10(randomness)));
+		    		// no_of_datapts = r* (double)pow(10.0,(OrderOf10(questions,j)- log10(randomness))); CHANGE
+                    no_of_datapts = r* (double)pow(10.0,(OrderOf10(selQ_number.size(),j)- log10(randomness)));
+                    // cout<<no_of_datapts<<" "<<r<<" "<<(OrderOf10(selQ_number.size(),j)- log10(randomness))<<" "<<pow(10.0,(OrderOf10(selQ_number.size(),j)- log10(randomness)))<<ln;
+                    // return 0; --> VERY sneaky bug! what if no_of_datapts becomes greater than max when randomness is small say 2!!
+
+                    long long estimate = OrderOf10(selQ_number.size(),j);
+                    long long no_of_datapts_buffer = INT_MAX;
+                    if(estimate < 12 ){
+                        no_of_datapts_buffer = binomialCoeff(selQ_number.size()-1,j);
+                        // cout<<no_of_datapts<<ln;
+                    }
+                    if (no_of_datapts_buffer < no_of_datapts) no_of_datapts = no_of_datapts_buffer;
+
 		    	}	
-                cout<<"question no."<<i<<" | step size:"<<j<<" | numeber of data points: "<<no_of_datapts<<ln;    
+                cout<<"question no."<<i+1<<" | step size:"<<j<<" | number of data points: "<<no_of_datapts<<ln;    
 		        for (long long k = 0; k < no_of_datapts; ++k)
 		        {
                     srand(rand()+k*time(0));
 		         	string a = generateBitString(temp, selQ_number.size()-1, j);
-                    // cout<<k<<" "<<no_of_datapts<<" "<<a<<ln;
+                    // cout<<j<<" "<<k<<" "<<no_of_datapts<<" "<<a<<ln;
 		         	if(VISITED.find(a)!=VISITED.end()){
-                        srand(rand());
+                        srand(rand()*rand()*rand());
 		         		k--;continue;
 		         	}else {
 		         		VISITED.insert(a);
@@ -521,12 +604,12 @@ int main (){
 	    }
 	}else{
         if(selfSelective==0){ //All question including self
-    		int allquestions[questions];
-            for (int i = 0; i < questions; ++i)
+    		long long allquestions[questions];
+            for (long long i = 0; i < questions; ++i)
             {
             	allquestions[i]=i;
             }
-            for (int i = 0; i < questions; ++i)
+            for (long long i = 0; i < questions; ++i)
             {
             	// printCombination(allquestions, questions, questions, i);
             	srand(rand());
@@ -534,11 +617,11 @@ int main (){
 		        float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 		        
 		        set<string> VISITED;
-			   // for(int j = starting_step ; j <= ending_step; ++j){
-                int j= questions;
+			   // for(long long j = starting_step ; j <= ending_step; ++j){
+                long long j= questions;
 		    	long long no_of_datapts;
 		    	if(randomness==1){
-		    		int estimate = OrderOf10(questions,j);
+		    		long long estimate = OrderOf10(questions,j);
 		    		if(estimate > 12){
 		    			cout<<"Too less randomness, Please try again after increasing randomness"<<endl;
 		    			return 0;
@@ -555,7 +638,7 @@ int main (){
                     srand(rand()+k*time(0));
 		         	string a = generateBitString(allquestions, questions, j);
 		         	if(VISITED.find(a)!=VISITED.end()){
-                        srand(rand());
+                        srand(rand()*rand()*rand());
 		         		k--;continue;
 		         	}else{
 		         		VISITED.insert(a);
@@ -566,60 +649,73 @@ int main (){
 
             
         }else{ //Selective questions including self
-            int temp[selQ_number.size()];
-            for (int i = 0; i < selQ_number.size(); ++i)
+
+            // cout<<starting_step<<" "<<ending_step<<" "<<randomness<<ln;
+            long long temp[selQ_number.size()];
+            for (long long i = 0; i < selQ_number.size(); ++i)
             {
                 temp[i]=selQ_number[i];
             }
-            /*for (int i = 0; i < selQ_number.size(); ++i)
+            /*for (long long i = 0; i < selQ_number.size(); ++i)  
             {
                 printCombination(temp, selQ_number.size(), selQ_number.size(), selQ_number[i]);
             }*/
 
-            for (int i = 0; i < selQ_number.size(); ++i){
+            for (long long i = 0; i < selQ_number.size(); ++i){
 		        srand(rand());
-		        int temp [selQ_number.size()-1];
-		        for (int j = 0,k =0; j < selQ_number.size()-1 ; ++j,++k){
+		        /*long long temp [selQ_number.size()-1];
+		        for (long long j = 0,k =0; j < selQ_number.size()-1 ; ++j,++k){
 		            if(k == selQ_number[i] ) {
 		                k++;
 		            }
 
 		            temp[j] = selQ_number[k] ;
-		        }
-		        /*for(int k = starting_step; k <= ending_step ; ++k ){
+		        }*/
+		        /*for(long long k = starting_step; k <= ending_step ; ++k ){
 		        printCombination(temp , selQ_number.size() - 1 , k , selQ_number[i]	);
 		        }*/
 
 		        
 		        set<string> VISITED;
-			    for(int j = starting_step ; j <= ending_step; ++j){
+			    for(long long j = starting_step ; j <= ending_step; ++j){
                     float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 			    	long long no_of_datapts;
 			    	if(randomness==1){
                         //cout<<"2"<<ln;
-			    		int estimate = OrderOf10(questions,j);
+			    		long long estimate = OrderOf10(selQ_number.size(),j);
 			    		if(estimate > 12){
 			    			cout<<"Too less randomness, Please try again after increasing randomness"<<endl;
 			    			return 0;
 			    		}else{
-			    			no_of_datapts = binomialCoeff(questions,j);
+			    			no_of_datapts = binomialCoeff(selQ_number.size(),j);
 			    		}
 			    	}
 			    	else{
-			    		no_of_datapts = r*(double)pow(10,(OrderOf10(questions,j)- log10(randomness)));
+			    		// no_of_datapts = r*(double)pow(10,(OrderOf10(questions,j)- log10(randomness))); CHANGE
+                        no_of_datapts = r* (double)pow(10.0,(OrderOf10(selQ_number.size(),j)- log10(randomness)));
+
+                        long long estimate = OrderOf10(selQ_number.size(),j);
+                        long long no_of_datapts_buffer = INT_MAX;
+                        if(estimate < 12 ){
+                            no_of_datapts_buffer = binomialCoeff(selQ_number.size(),j);
+                            // cout<<no_of_datapts<<ln;
+                        }
+                        if (no_of_datapts_buffer < no_of_datapts) no_of_datapts = no_of_datapts_buffer;
+
 			    	}	
 			    	// cout<<no_of_datapts<<ln;
-                    cout<<"question no."<<i<<" | step size:"<<j<<" | numeber of data points: "<<no_of_datapts<<ln;    
+                    cout<<"question no."<<i+1<<" | step size:"<<j<<" | number of data points: "<<no_of_datapts<<ln;    
 			        for (long long k = 0; k < no_of_datapts; ++k)
 			        {
 
-			         	string a = generateBitString(temp, selQ_number.size()-1, j);
-                        // cout<<k<<" "<<a;
+			         	string a = generateBitString(temp, selQ_number.size(), j);
+                        // cout<<k<<" "<<a<<ln
                         srand(rand()+k*time(0));
 			         	if(VISITED.find(a)!=VISITED.end()){
-                            srand(rand());
+                            // cout<<j<<" "<<k<<" "<<no_of_datapts<<" "<<a<<" "<<selQ_number.size()<<ln;
+                            srand(rand()*rand()*rand());
 			         		k--;continue;
-			         	}else {
+			         	}else{
 			         		VISITED.insert(a);
 			         		generateDIusingBitString(a, selQ_number[i]);
 			         	}
@@ -629,7 +725,7 @@ int main (){
         }
 	}
     auto m = ans.begin();
-    int ques = m->first + 1;
+    long long ques = m->first + 1;
     if(yash==1){
     	fout.open(output_file_name+".csv");
     	for (auto i = ans.begin(); i != ans.end(); ++i){
@@ -639,7 +735,7 @@ int main (){
 	        fout << std::setprecision(6);
 	        fout<< j->first <<",";
 	        auto k = j->second;
-	        for(int f = 0 ; f< k.size() ; f++)
+	        for(long long f = 0 ; f< k.size() ; f++)
 	         fout<< k[f]+1<<",";
 	        fout<<"\n";
     	}
@@ -660,7 +756,7 @@ int main (){
         fout << std::setprecision(6);
         fout<< j->first <<",";
         auto k = j->second;
-        for(int f = 0 ; f< k.size() ; f++)
+        for(long long f = 0 ; f< k.size() ; f++)
          fout<< k[f]+1<<",";
          fout<<"\n";
     }
